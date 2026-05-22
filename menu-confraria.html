@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encontro de Confrades — Menu Degustação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2EBDD;
+    --paper:#FAF4E6;
+    --paper-warm:#FFF9EC;
+    --ink:#3A3127;
+    --ink-soft:#6F6253;
+    --ink-mute:#9C8B72;
+    --gold:#A8915C;
+    --gold-deep:#876F3F;
+    --gold-bright:#C1A974;
+    --line:#D3C5A6;
+    --line-soft:#E5DBC2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'EB Garamond',serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    pointer-events:none;z-index:1;mix-blend-mode:multiply;
+  }
+  .container{
+    max-width:760px;margin:0 auto;
+    padding:64px 36px 100px;
+    position:relative;z-index:2;
+  }
+  /* HEADER */
+  .header{text-align:center;padding:24px 0 48px;}
+  .preheader{
+    font-family:'EB Garamond',serif;
+    color:var(--gold);letter-spacing:0.55em;font-size:11px;
+    text-transform:uppercase;margin-bottom:28px;font-weight:500;
+  }
+  .header h1{
+    font-family:'Italiana',serif;font-style:italic;
+    font-size:clamp(48px,8vw,76px);font-weight:400;
+    line-height:0.95;color:var(--ink);margin-bottom:20px;
+  }
+  .header .date{
+    font-family:'Cormorant Garamond',serif;font-size:12px;
+    color:var(--ink-soft);letter-spacing:0.4em;
+    text-transform:uppercase;margin-bottom:12px;
+  }
+  .header .chef{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--gold);font-size:17px;letter-spacing:0.04em;
+  }
+  .intro{
+    text-align:center;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:14.5px;color:var(--ink-mute);
+    max-width:460px;margin:0 auto;line-height:1.7;padding:0 8px;
+  }
+  .top-divider{width:100%;border-top:1px solid var(--line);margin-top:36px;}
+  /* COURSES */
+  .course{padding:44px 0 4px;}
+  .course-label{
+    font-family:'EB Garamond',serif;font-size:11px;color:var(--gold);
+    letter-spacing:0.4em;text-transform:uppercase;
+    margin-bottom:12px;font-weight:500;
+  }
+  .course-title{
+    font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:29px;color:var(--ink);line-height:1.2;margin-bottom:8px;
+  }
+  .course-desc{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:17px;color:var(--ink-soft);line-height:1.5;margin-bottom:24px;
+  }
+  /* WINE CARDS */
+  .wine-block{border-top:1px dotted var(--line);padding-top:18px;}
+  .wine-card{
+    background:var(--paper);border:1px solid var(--line);
+    padding:18px 22px;cursor:pointer;
+    transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    position:relative;margin-bottom:10px;
+  }
+  .wine-card::before{
+    content:'';position:absolute;left:0;top:0;
+    width:2px;height:100%;background:var(--gold);
+    transform:scaleY(0);transform-origin:top;
+    transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .wine-card:hover{
+    background:var(--paper-warm);border-color:var(--gold);
+    transform:translateX(3px);
+  }
+  .wine-card:hover::before{transform:scaleY(1);}
+  .wine-row{
+    display:flex;justify-content:space-between;
+    align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .wine-meta{flex:1;min-width:0;}
+  .wine-tag{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:10px;
+    color:var(--gold);letter-spacing:0.28em;text-transform:uppercase;
+    margin-bottom:5px;font-weight:500;
+  }
+  .wine-name{
+    font-family:'Cormorant Garamond',serif;font-size:18.5px;
+    font-weight:500;color:var(--ink);line-height:1.25;
+    cursor:pointer;transition:color 0.2s ease;
+    display:inline-block;
+  }
+  .wine-name:hover{color:var(--gold-deep);}
+  .wine-name:hover .wine-vintage{color:var(--gold);}
+  .wine-name:focus-visible{outline:1px dashed var(--gold);outline-offset:4px;}
+  .wine-vintage{font-style:italic;color:var(--gold-deep);font-weight:400;}
+  .wine-region{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:13px;color:var(--ink-mute);margin-top:3px;
+  }
+  .wine-actions{display:flex;gap:8px;flex-shrink:0;}
+  .btn{
+    background:transparent;border:1px solid var(--gold);
+    color:var(--gold-deep);padding:7px 14px;
+    font-family:'EB Garamond',serif;font-style:italic;
+    font-size:12.5px;letter-spacing:0.04em;cursor:pointer;
+    transition:all 0.2s ease;white-space:nowrap;
+  }
+  .btn:hover{background:var(--gold);color:var(--paper);}
+  /* DIAMOND DIVIDER */
+  .ornament{
+    text-align:center;margin:40px 0 4px;color:var(--gold);
+    font-size:12px;line-height:1;
+  }
+  .ornament-line{
+    display:inline-block;vertical-align:middle;
+    width:42px;height:1px;background:var(--line);margin:0 14px;
+  }
+  /* FOOTER */
+  .footer{
+    text-align:center;margin-top:72px;padding-top:28px;
+    border-top:1px solid var(--line);
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--ink-mute);font-size:13px;letter-spacing:0.06em;
+  }
+  /* ============ MODAL — WINE FOLLY STYLE ============ */
+  .modal-backdrop{
+    position:fixed;inset:0;
+    background:rgba(58,49,39,0.55);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;
+    transition:opacity 0.3s ease;
+    z-index:200;display:flex;
+    align-items:center;justify-content:center;padding:20px 12px;
+  }
+  .modal-backdrop.active{opacity:1;pointer-events:auto;}
+  .modal{
+    background:var(--paper);border:1px solid var(--gold);
+    max-width:760px;width:100%;max-height:92vh;
+    overflow-y:auto;position:relative;
+    transform:scale(0.96) translateY(16px);
+    transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow:0 30px 60px rgba(58,49,39,0.25);
+  }
+  .modal-backdrop.active .modal{transform:scale(1) translateY(0);}
+  .modal::-webkit-scrollbar{width:6px;}
+  .modal::-webkit-scrollbar-track{background:var(--bg);}
+  .modal::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+  .modal-close{
+    position:absolute;top:14px;right:14px;
+    background:rgba(250,244,230,0.9);border:1px solid var(--line);
+    color:var(--ink-soft);width:34px;height:34px;
+    cursor:pointer;font-size:18px;line-height:1;
+    transition:all 0.2s ease;display:flex;
+    align-items:center;justify-content:center;z-index:5;
+  }
+  .modal-close:hover{background:var(--gold);color:var(--paper);border-color:var(--gold);}
+  /* Wine color band */
+  .wine-band{
+    height:90px;width:100%;position:relative;
+    display:flex;align-items:flex-end;padding:18px 32px;
+  }
+  .wine-band::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.15) 100%);
+    pointer-events:none;
+  }
+  .band-type{
+    font-family:'EB Garamond',serif;font-style:italic;
+    color:rgba(255,255,255,0.95);font-size:11px;
+    letter-spacing:0.32em;text-transform:uppercase;
+    position:relative;z-index:1;font-weight:500;
+    text-shadow:0 1px 2px rgba(0,0,0,0.2);
+  }
+  /* Title area */
+  .wine-head{padding:28px 36px 22px;border-bottom:1px solid var(--line-soft);}
+  .wine-title{
+    font-family:'Italiana',serif;font-style:italic;
+    font-size:34px;color:var(--ink);line-height:1.05;
+    margin-bottom:8px;
+  }
+  .wine-vintage-big{
+    font-family:'Cormorant Garamond',serif;font-size:14px;
+    color:var(--gold-deep);letter-spacing:0.18em;
+    text-transform:uppercase;margin-bottom:10px;
+  }
+  .wine-vintage-big span{color:var(--ink-mute);}
+  .wine-sub{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:16px;color:var(--ink-soft);
+  }
+  /* Quick facts */
+  .facts{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:0;border-bottom:1px solid var(--line-soft);
+  }
+  .fact{
+    padding:18px 14px;text-align:center;
+    border-right:1px solid var(--line-soft);
+  }
+  .fact:last-child{border-right:none;}
+  .fact-label{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:9.5px;
+    color:var(--gold);letter-spacing:0.25em;text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .fact-value{
+    font-family:'Cormorant Garamond',serif;font-size:15px;
+    color:var(--ink);font-weight:500;line-height:1.2;
+  }
+  /* Section blocks */
+  .section{padding:24px 36px;border-bottom:1px solid var(--line-soft);}
+  .section:last-child{border-bottom:none;}
+  .section-title{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:11px;
+    color:var(--gold);letter-spacing:0.3em;text-transform:uppercase;
+    margin-bottom:14px;font-weight:600;
+  }
+  /* Castas */
+  .grapes{display:flex;flex-direction:column;gap:10px;}
+  .grape-row{display:flex;align-items:center;gap:14px;}
+  .grape-name{
+    font-family:'Cormorant Garamond',serif;font-size:15px;
+    color:var(--ink);min-width:170px;flex-shrink:0;
+  }
+  .grape-bar{
+    flex:1;height:6px;background:var(--line-soft);
+    border-radius:3px;overflow:hidden;
+  }
+  .grape-fill{
+    height:100%;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-bright) 100%);
+    border-radius:3px;
+  }
+  .grape-pct{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:13px;
+    color:var(--gold-deep);min-width:38px;text-align:right;font-weight:500;
+  }
+  /* Perfil bars */
+  .profile{display:flex;flex-direction:column;gap:14px;}
+  .profile-row{display:grid;grid-template-columns:90px 1fr 90px;gap:12px;align-items:center;}
+  .profile-l,.profile-r{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:11px;
+    color:var(--ink-mute);letter-spacing:0.06em;
+  }
+  .profile-l{text-align:right;}
+  .profile-bar{
+    height:8px;background:var(--line-soft);border-radius:4px;
+    position:relative;overflow:hidden;
+  }
+  .profile-dot{
+    position:absolute;top:50%;transform:translate(-50%,-50%);
+    width:16px;height:16px;background:var(--gold-deep);
+    border-radius:50%;box-shadow:0 0 0 3px var(--paper);
+  }
+  .profile-label{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:11px;
+    color:var(--gold);letter-spacing:0.18em;text-transform:uppercase;
+    margin-bottom:4px;text-align:center;font-weight:500;
+  }
+  /* Aromas — chips by category */
+  .aromas{display:flex;flex-direction:column;gap:14px;}
+  .aroma-cat{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+  .aroma-cat-label{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:12.5px;color:var(--gold);letter-spacing:0.08em;
+    min-width:95px;flex-shrink:0;
+  }
+  .chip{
+    display:inline-block;
+    background:rgba(168,145,92,0.1);border:1px solid var(--line);
+    color:var(--ink);padding:5px 12px;border-radius:14px;
+    font-family:'Cormorant Garamond',serif;font-size:13.5px;
+    line-height:1.2;
+  }
+  /* Text block */
+  .text-block{
+    font-family:'EB Garamond',serif;font-size:15px;
+    color:var(--ink);line-height:1.7;
+  }
+  .text-block + .text-block{margin-top:10px;}
+  .text-block strong{color:var(--gold-deep);font-weight:600;}
+  /* Pairing modal differs slightly */
+  .pairing-header{
+    padding:28px 36px 22px;border-bottom:1px solid var(--line-soft);
+    background:linear-gradient(180deg,rgba(168,145,92,0.06) 0%,transparent 100%);
+  }
+  .pairing-tag{
+    font-family:'EB Garamond',serif;font-style:italic;font-size:11px;
+    color:var(--gold);letter-spacing:0.3em;text-transform:uppercase;
+    margin-bottom:10px;font-weight:600;
+  }
+  .pairing-title{
+    font-family:'Italiana',serif;font-style:italic;
+    font-size:28px;color:var(--ink);line-height:1.15;margin-bottom:10px;
+  }
+  .pairing-dish{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:15px;color:var(--ink-soft);
+  }
+  /* Responsive */
+  @media (max-width:640px){
+    .container{padding:40px 22px 80px;}
+    .course-title{font-size:24px;}
+    .course-desc{font-size:15.5px;}
+    .wine-row{flex-direction:column;align-items:flex-start;}
+    .wine-actions{width:100%;}
+    .btn{flex:1;text-align:center;}
+    .wine-band{padding:14px 22px;height:70px;}
+    .wine-head{padding:22px 22px 18px;}
+    .wine-title{font-size:26px;}
+    .section{padding:20px 22px;}
+    .facts{grid-template-columns:repeat(2,1fr);}
+    .fact{border-bottom:1px solid var(--line-soft);}
+    .fact:nth-child(2){border-right:none;}
+    .fact:nth-child(3),.fact:nth-child(4){border-bottom:none;}
+    .grape-name{min-width:130px;font-size:13.5px;}
+    .profile-row{grid-template-columns:70px 1fr 70px;}
+    .profile-l,.profile-r{font-size:10px;}
+    .aroma-cat-label{min-width:auto;width:100%;margin-bottom:4px;}
+    .pairing-header{padding:22px;}
+  }
+  /* Entry animations */
+  .course{opacity:0;transform:translateY(16px);animation:fade 0.7s cubic-bezier(0.4,0,0.2,1) forwards;}
+  .course:nth-of-type(1){animation-delay:0s;}
+  .course:nth-of-type(2){animation-delay:0.08s;}
+  .course:nth-of-type(3){animation-delay:0.16s;}
+  .course:nth-of-type(4){animation-delay:0.24s;}
+  .course:nth-of-type(5){animation-delay:0.32s;}
+  @keyframes fade{to{opacity:1;transform:translateY(0);}}
+  .header{animation:fade 0.8s cubic-bezier(0.4,0,0.2,1) forwards;}
+  .intro{opacity:0;animation:fade 0.8s cubic-bezier(0.4,0,0.2,1) 0.15s forwards;}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="preheader">Encontro de Confrades</div>
+    <h1>Menu Degustação</h1>
+    <div class="date">27 de Maio de 2025</div>
+    <div class="chef">Chef Tânia</div>
+  </header>
+
+  <div class="intro">
+    Cada prato foi pensado para servir o vinho que o acompanha.
+    Toque em <em>o vinho</em> para a ficha completa, ou em <em>harmonização</em> para entender o encontro.
+  </div>
+
+  <div class="top-divider"></div>
+
+  <section class="course">
+    <div class="course-label">Amuse-Bouche</div>
+    <div class="course-title">Vieiras Grelhadas</div>
+    <div class="course-desc">Na manteiga noisette, servidas com puré de couve-flor aveludado</div>
+    <div class="wine-block">
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Vinho</div>
+            <div class="wine-name" data-wine="ferrari" role="button" tabindex="0">Giulio Ferrari Riserva del Fondatore <span class="wine-vintage">2009</span></div>
+            <div class="wine-region">Trentodoc · Trentino, Itália</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="ferrari">harmonização</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span class="ornament-line"></span>✦<span class="ornament-line"></span></div>
+
+  <section class="course">
+    <div class="course-label">Entrada</div>
+    <div class="course-title">Risoto de Funghi Porcini</div>
+    <div class="course-desc">Ao toque da Chef</div>
+    <div class="wine-block">
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Vinho</div>
+            <div class="wine-name" data-wine="corton" role="button" tabindex="0">Corton Grand Cru Clos du Roy <span class="wine-vintage">1997</span></div>
+            <div class="wine-region">Domaine Antonin Guyon · Côte de Beaune, Borgonha</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="corton">harmonização</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span class="ornament-line"></span>✦<span class="ornament-line"></span></div>
+
+  <section class="course">
+    <div class="course-label">Prato Principal · flight de tintos</div>
+    <div class="course-title">Tagliatelle com Ossobuco</div>
+    <div class="course-desc">Ao vinho tinto, cozido em fogo lento</div>
+    <div class="wine-block">
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Primeiro tinto · o frágil</div>
+            <div class="wine-name" data-wine="pavillon" role="button" tabindex="0">Pavillon Rouge du Château Margaux <span class="wine-vintage">1982</span></div>
+            <div class="wine-region">Margaux AOC · Bordeaux, França</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="pavillon">harmonização</button>
+          </div>
+        </div>
+      </div>
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Segundo tinto · o tenso</div>
+            <div class="wine-name" data-wine="tignanello" role="button" tabindex="0">Tignanello <span class="wine-vintage">2015</span></div>
+            <div class="wine-region">Toscana IGT · Marchesi Antinori, Itália</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="tignanello">harmonização</button>
+          </div>
+        </div>
+      </div>
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Terceiro tinto · o opulento</div>
+            <div class="wine-name" data-wine="guado" role="button" tabindex="0">Guado al Tasso <span class="wine-vintage">2015</span></div>
+            <div class="wine-region">Bolgheri Superiore DOC · Antinori, Itália</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="guado">harmonização</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span class="ornament-line"></span>✦<span class="ornament-line"></span></div>
+
+  <section class="course">
+    <div class="course-label">Queijos</div>
+    <div class="course-title">Seleção de Queijos Curados</div>
+    <div class="course-desc">Servidos com pão artesanal de nozes e peras em lâminas</div>
+    <div class="wine-block">
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Vinho</div>
+            <div class="wine-name" data-wine="soldera" role="button" tabindex="0">Soldera Case Basse · Brunello di Montalcino Riserva <span class="wine-vintage">2005</span></div>
+            <div class="wine-region">Montalcino · Toscana, Itália</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="soldera">harmonização</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span class="ornament-line"></span>✦<span class="ornament-line"></span></div>
+
+  <section class="course">
+    <div class="course-label">Sobremesa</div>
+    <div class="course-title">Peras Assadas</div>
+    <div class="course-desc">Com creme anglais e especiarias</div>
+    <div class="wine-block">
+      <div class="wine-card">
+        <div class="wine-row">
+          <div class="wine-meta">
+            <div class="wine-tag">Vinho</div>
+            <div class="wine-name" data-wine="suduiraut" role="button" tabindex="0">Château Suduiraut <span class="wine-vintage">2018</span></div>
+            <div class="wine-region">Sauternes Premier Cru Classé 1855 · Bordeaux</div>
+          </div>
+          <div class="wine-actions">
+            <button class="btn" data-pairing="suduiraut">harmonização</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <em>Bon appétit · Com harmonia e prazer à mesa</em>
+  </footer>
+</div>
+
+<div class="modal-backdrop" id="modal" aria-hidden="true">
+  <div class="modal" role="dialog">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const wines = {
+  ferrari: {
+    bandColor:'linear-gradient(135deg,#D4B36A 0%,#B89548 100%)',
+    type:'Espumante · Trentodoc Metodo Classico',
+    title:'Giulio Ferrari Riserva del Fondatore',
+    vintage:'Safra 2009',
+    sub:'Trentino, Itália · Maso Pianizza',
+    facts:[
+      ['Cor','Amarelo dourado'],
+      ['Álcool','12,5%'],
+      ['Serviço','8–10°C'],
+      ['Guarda','15+ anos'],
+    ],
+    grapes:[['Chardonnay',100]],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:8},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:88},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:72},
+      {label:'Perlage',l:'Fina',r:'Persistente',pos:90},
+    ],
+    aromas:[
+      ['Frutas','Maçã madura','Pera Williams','Pêssego branco','Figo seco'],
+      ['Florais','Flor de tília','Flor de laranjeira'],
+      ['Pastelaria','Brioche','Croissant tostado','Gianduia','Nozes torradas'],
+      ['Cítricos','Casca de laranja','Limão confitado'],
+      ['Terciários','Mel de acácia','Baunilha','Hidromel'],
+    ],
+    making:'<strong>Metodo Classico</strong> com leveduras próprias da casa. Fermentação secundária em garrafa seguida de <strong>mais de 10 anos sobre as borras</strong> antes do degorgement. Dosagem extra brut (entre 1,5 e 2,7 g/L). Sem passagem por madeira nova — toda a complexidade vem da autólise.',
+    house:'Casa fundada em 1902 por Giulio Ferrari, pioneiro do Chardonnay alpino no Trentino. Hoje pertencente à família Lunelli. O <strong>Riserva del Fondatore</strong> nasceu em 1972 e é produzido apenas em safras excepcionais — não é "champagne italiano", é categoria própria, com identidade de altitude.',
+    vintage_note:'<strong>2009 em Trento</strong>: agosto frio e pontuado por tempestades, o que <strong>preservou acidez</strong> e ampliou o desenvolvimento aromático. Cachos saudáveis e bem espaçados. Mais de 10 anos sobre as borras entregaram o perfil opulento e brioché que define o estilo da casa. No auge agora.',
+  },
+  corton: {
+    bandColor:'linear-gradient(135deg,#A85D5D 0%,#7A3535 100%)',
+    type:'Tinto · Grand Cru · Côte de Beaune',
+    title:'Corton Grand Cru Clos du Roy',
+    vintage:'Safra 1997 · Domaine Antonin Guyon',
+    sub:'Savigny-lès-Beaune · Borgonha, França',
+    facts:[
+      ['Cor','Rubi evoluído'],
+      ['Álcool','~13%'],
+      ['Serviço','15–16°C'],
+      ['Decantação','Suave, 30 min'],
+    ],
+    grapes:[['Pinot Noir',100]],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:3},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:55},
+      {label:'Tanino',l:'Suave',r:'Firme',pos:35},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:50},
+    ],
+    aromas:[
+      ['Frutas','Cereja em conserva','Framboesa seca','Groselha'],
+      ['Florais','Rosa murcha','Pétala seca','Violeta'],
+      ['Terciários','Sub-bosque','Cogumelo seco','Trufa discreta','Couro fino','Terra molhada'],
+      ['Especiarias','Cravo','Especiarias doces','Canela'],
+    ],
+    making:'Vinificação tradicional borgonhesa: cuves de carvalho, leveduras indígenas, maceração suave. <strong>14–18 meses em barrica francesa</strong> (~30–40% nova). Sem práticas extremas — escola de Borgonha clássica que respeita o terroir do climat. O <strong>Clos du Roy</strong> ocupa o topo da colina de Corton, em solo calcário ferruginoso com argila.',
+    house:'<strong>Domaine Antonin Guyon</strong> foi fundado nos anos 60 por Antonin Guyon (já com 55 anos), comprando suas primeiras parcelas em Gevrey e Meursault. Hoje, com sede em <strong>Savigny-lès-Beaune</strong>, é uma propriedade de 47 hectares conduzida por Dominique Guyon e sua filha Hombeline, com vinhas em 25 denominações da Côte d\'Or — de Hautes Côtes de Nuits a Meursault. Estilo clássico e fiel ao terroir, sem maquiagem.',
+    vintage_note:'<strong>1997 na Borgonha</strong>: ano <strong>quente e precoce</strong>, com vinhos de menor acidez e maturação opulenta — destinados ao consumo cedo. O Clos du Roy 97 da Antonin Guyon recebeu nota crítica modesta (86/100), refletindo o caráter da safra. Aos 28 anos, vinho no <strong>platô final</strong> — todo terciário, frágil, etéreo. <strong>Beba agora</strong>; prove na abertura e antecipe se mostrar cansaço.',
+  },
+  pavillon: {
+    bandColor:'linear-gradient(135deg,#7A3535 0%,#4F1F1F 100%)',
+    type:'Tinto · Margaux AOC · 2º vinho do Château Margaux',
+    title:'Pavillon Rouge du Château Margaux',
+    vintage:'Safra 1982 · safra do século',
+    sub:'Médoc, Bordeaux, França',
+    facts:[
+      ['Cor','Granada / borda tijolo'],
+      ['Álcool','~13%'],
+      ['Serviço','16–17°C'],
+      ['Decantação','45 min · suave'],
+    ],
+    grapes:[
+      ['Cabernet Sauvignon',75],
+      ['Merlot',21],
+      ['Cabernet Franc',4],
+    ],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:3},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:70},
+      {label:'Tanino',l:'Suave',r:'Firme',pos:42},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:78},
+    ],
+    aromas:[
+      ['Frutas','Cassis em conserva','Ameixa seca','Figo macerado','Cereja preta evoluída'],
+      ['Especiarias','Tabaco curado','Charuto cubano','Caixa de cigarro'],
+      ['Terciários','Cedro úmido','Couro velho','Trufa madura','Sub-bosque'],
+      ['Mineral','Grafite','Lápis de chumbo','Pedra calcária'],
+      ['Florais','Flor seca','Violeta evoluída'],
+    ],
+    making:'Fermentação em cuves de carvalho, tradicional. <strong>18–24 meses em barrica francesa nova</strong>. Colagem com clara de ovo antes do engarrafamento. O Pavillon Rouge usa as parcelas mais jovens do domínio — em 1982, a fartura da safra fez essas parcelas receberem fruta com qualidade Grand Vin.',
+    house:'Segundo vinho do Château Margaux, denominação Margaux AOC. Não é "vinho menor" — em safras como 1982, recebe fruta excepcional. Em condições normais, ~30% da produção total do château.',
+    vintage_note:'<strong>1982 em Bordeaux é referência absoluta</strong> — julho e início de setembro extremamente quentes, recorde de concentração de açúcar, maturação ideal. O próprio Château Margaux declarou em 2018 que o Pavillon 82 <strong>"chegou ao auge — não há nada a ganhar esperando mais"</strong>. Aos 44 anos, é o vinho mais frágil e nobre da mesa.',
+  },
+  tignanello: {
+    bandColor:'linear-gradient(135deg,#8B3434 0%,#5A1F1F 100%)',
+    type:'Super-Toscano · Toscana IGT',
+    title:'Tignanello',
+    vintage:'Safra 2015',
+    sub:'Marchesi Antinori · Tenuta Tignanello, Chianti Classico',
+    facts:[
+      ['Cor','Rubi profundo'],
+      ['Álcool','~14%'],
+      ['Serviço','16–18°C'],
+      ['Decantação','60 min'],
+    ],
+    grapes:[
+      ['Sangiovese',85],
+      ['Cabernet Sauvignon',15],
+    ],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:3},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:78},
+      {label:'Tanino',l:'Suave',r:'Firme',pos:75},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:78},
+    ],
+    aromas:[
+      ['Frutas','Cereja preta','Mirtilo','Ameixa madura','Amora'],
+      ['Florais','Rosa','Violeta','Flores silvestres'],
+      ['Especiarias','Tabaco doce','Alcaçuz','Baunilha','Sândalo'],
+      ['Terciários','Couro novo','Fumaça','Café','Cacau'],
+      ['Mineral','Grafite'],
+    ],
+    making:'Fermentação em cuves tronco-cônicos, maceração ~14 dias, malolática em barrica. <strong>14 meses em barrica francesa e húngara</strong> (~⅓ nova). A partir de 2015, a casa mudou a filosofia: <strong>blending feito mais cedo</strong> (antes era apenas próximo do engarrafamento) para melhor integração.',
+    house:'<strong>O super-toscano fundador</strong>. Antinori rompeu com a DOC do Chianti em 1971 ao adicionar Cabernet ao Sangiovese — criou uma categoria. Vinhedo único entre 350–400m, exposição sudoeste, solos calcários com elementos tufáceos (alberese).',
+    vintage_note:'<strong>2015 na Toscana foi excepcional</strong> — Antonio Galloni: "um dos melhores Tignanellos da memória recente". Verão quente equilibrado, maturação ideal. Notável: <strong>85% Sangiovese é proporção maior que o usual (80%)</strong>, dando mais frescor e energia. James Suckling 98 pontos: "melhor desde o lendário 1997". Aos 11 anos, expressivo agora, ainda décadas pela frente.',
+  },
+  guado: {
+    bandColor:'linear-gradient(135deg,#5C1F2A 0%,#3A1217 100%)',
+    type:'Bolgheri Superiore DOC · super-toscano costeiro',
+    title:'Guado al Tasso',
+    vintage:'Safra 2015',
+    sub:'Marchesi Antinori · Bolgheri, costa do Tirreno',
+    facts:[
+      ['Cor','Rubi quase opaco'],
+      ['Álcool','~14,5%'],
+      ['Serviço','16–18°C'],
+      ['Decantação','60 min'],
+    ],
+    grapes:[
+      ['Cabernet Sauvignon',60],
+      ['Merlot',20],
+      ['Cabernet Franc',18],
+      ['Petit Verdot',2],
+    ],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:3},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:55},
+      {label:'Tanino',l:'Suave',r:'Firme',pos:75},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:90},
+    ],
+    aromas:[
+      ['Frutas','Cassis','Mirtilo','Amora preta','Ameixa madura'],
+      ['Especiarias','Alcaçuz','Anis estrelado','Pimenta-da-jamaica','Especiaria doce'],
+      ['Terciários','Cacau','Café','Tabaco','Caramelo salgado'],
+      ['Mineral','Grafite','Chumbo de lápis'],
+      ['Vegetais nobres','Eucalipto','Menta','Pimentão grelhado'],
+    ],
+    making:'Fermentação em <strong>aço inox por 15–20 dias</strong>, depois transferência para <strong>barrica francesa nova</strong> (alta proporção) por <strong>14 meses</strong>. Colheita do Merlot começou em 12 de setembro de 2015. Blending feito em fevereiro após seleção das melhores parcelas.',
+    house:'Bolgheri é a "Médoc italiana" — variedades bordelesas em clima mediterrâneo. Guado al Tasso é o flagship da Antinori na região, primeira safra em 1990. <strong>Anfiteatro de Bolgheri</strong>: planície cercada de colinas voltadas ao Tirreno, com brisas marítimas que moderam o calor.',
+    vintage_note:'<strong>2015 em Bolgheri foi excepcional</strong> para os tintos blendados toscanos. Inverno ameno, primavera seca, brotação adiantada. As variações térmicas do anfiteatro foram cruciais no calor de 2015. <strong>Servido em paralelo ao Tignanello da mesma safra</strong>, o flight ensina: mesma casa, mesma colheita, perfis opostos. Sangiovese tenso vs. Cabernet mediterrâneo.',
+  },
+  soldera: {
+    bandColor:'linear-gradient(135deg,#933B3B 0%,#5F1E1E 100%)',
+    type:'Brunello di Montalcino Riserva DOCG · vinho de culto',
+    title:'Soldera Case Basse',
+    vintage:'Safra 2005 · último Riserva da casa',
+    sub:'Gianfranco Soldera · Montalcino, Toscana',
+    facts:[
+      ['Cor','Granada translúcido'],
+      ['Álcool','~14,5%'],
+      ['Serviço','16–18°C'],
+      ['Decantação','1h · decanter largo'],
+    ],
+    grapes:[['Sangiovese Grosso',100]],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:3},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:90},
+      {label:'Tanino',l:'Suave',r:'Firme',pos:50},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:55},
+    ],
+    aromas:[
+      ['Florais','Violeta','Rosa','Alcaçuz floral','Sândalo'],
+      ['Frutas','Cereja vermelha em conserva','Framboesa','Frutas vermelhas pungentes'],
+      ['Especiarias','Cardamomo','Pimenta branca','Especiarias finíssimas'],
+      ['Terciários','Tabaco delicado','Couro etéreo','Cogumelo','Casca de árvore'],
+      ['Mineral','Floresta após chuva','Terra úmida'],
+    ],
+    making:'Filosofia próxima ao manifesto. <strong>Fermentação espontânea</strong> em cuves de madeira, sem controle de temperatura, sem leveduras selecionadas. Envelhecimento <strong>5+ anos em botte grande de Slavonia</strong> — Soldera detestava barriques ("apenas para vinhos deficientes que não receberam tanino e aroma suficiente das uvas"). Rendimentos baixíssimos: ~15 hl/ha.',
+    house:'Gianfranco Soldera era figura singular. Em 2012 rompeu com o Consorzio do Brunello após ataque ao cellar; safras a partir de 2006 vendidas como <strong>Toscana IGT</strong>. <strong>O Riserva 2005 é o último Brunello Riserva oficial da casa</strong> — engarrafado em março de 2011, apenas 11.000 garrafas no total.',
+    vintage_note:'<strong>2005 em Montalcino</strong>, nas palavras do próprio Soldera: "ano muito bom, com clima adequado, chuvas oportunas no verão, setembro excelente que permitiu maturação perfeita". Colheita ao fim de setembro com uvas saudíssimas. Aos 21 anos, no <strong>auge gustativo</strong>. Pede comida discreta — pureza do Sangiovese acima de qualquer molho pesado.',
+  },
+  suduiraut: {
+    bandColor:'linear-gradient(135deg,#C58A2F 0%,#8E5C18 100%)',
+    type:'Sauternes · 1er Cru Classé 1855',
+    title:'Château Suduiraut',
+    vintage:'Safra 2018',
+    sub:'Sauternes, Bordeaux, França',
+    facts:[
+      ['Cor','Âmbar dourado'],
+      ['Álcool','13,5–14%'],
+      ['Serviço','8–10°C'],
+      ['Açúcar','~120–140 g/L'],
+    ],
+    grapes:[
+      ['Sémillon',90],
+      ['Sauvignon Blanc',10],
+    ],
+    profile:[
+      {label:'Doçura',l:'Seco',r:'Doce',pos:88},
+      {label:'Acidez',l:'Baixa',r:'Alta',pos:72},
+      {label:'Corpo',l:'Leve',r:'Encorpado',pos:90},
+      {label:'Botrytis',l:'Discreto',r:'Marcante',pos:75},
+    ],
+    aromas:[
+      ['Frutas','Damasco','Pêssego em calda','Abacaxi confitado','Marmelo'],
+      ['Botrytizados','Mel de acácia','Mel cristalizado','Açafrão'],
+      ['Especiarias','Baunilha','Casca de laranja','Cardamomo'],
+      ['Cítricos','Casca de tangerina','Mandarim'],
+      ['Florais','Acácia em flor','Tília'],
+    ],
+    making:'Colheita por <strong>tries sucessivos</strong> (até 6–7 passagens manuais selecionando apenas grãos com <strong>botrytis cinerea</strong> – podridão nobre). Fermentação em barrica nova, sem stop-cold. <strong>18–24 meses em barrica francesa</strong> (~⅓ nova). Tradição clássica de Sauternes.',
+    house:'<strong>Suduiraut é considerado o segundo maior de Sauternes depois de Yquem</strong> por muitos críticos. 92 hectares de vinhedo, parte da denominação Sauternes AOC, classificação 1er Cru Classé de 1855. Propriedade hoje da AXA Millésimes.',
+    vintage_note:'<strong>2018 em Sauternes</strong> foi <strong>safra boa</strong>, sem chegar ao patamar lendário de 2001/2009/2011 — primavera úmida, depois verão quente e seco que pôde comprometer botrytis. O melhor desses Sauternes vem com <strong>10–15 anos de garrafa</strong>; aos 7 anos, o vinho ainda é frutado e baunilhado, falta a complexidade terciária (casca de laranja seca, mel velho). <strong>Garrafa 375ml = ~6 doses de 60ml</strong> — confirmar nº de convidados.',
+  },
+};
+
+const pairings = {
+  ferrari: {
+    wine:'Giulio Ferrari Riserva 2009',
+    dish:'Vieiras Grelhadas · manteiga noisette · puré de couve-flor',
+    why:'A vieira chega doce e ligeiramente caramelizada da grelha, envelopada pela <strong>manteiga noisette</strong> — gordura tostada com notas de avelã. O puré de couve-flor adiciona sedosidade vegetal sem peso. No vinho, mais de dez anos de autólise sobre as borras entregaram <strong>brioche, nozes torradas, baunilha, mel de acácia</strong> — exatamente o universo aromático da manteiga noisette no prato. <strong>Gordura láctea encontra autólise: espelho perfeito.</strong> A acidez alpina e a perlage fina cortam a riqueza a cada gole e deixam o palato pronto para a próxima garfada. A confraria começa em registro cremoso e cítrico — abertura opulenta mas viva.',
+  },
+  corton: {
+    wine:'Corton Grand Cru Clos du Roy 1997 · Antonin Guyon',
+    dish:'Risoto de Funghi Porcini · ao toque da Chef',
+    why:'O risoto chega cremoso, com <strong>umami profundo dos porcini</strong> e o toque pessoal da Chef no acabamento. O Pinot Noir borgonhês aos 28 anos é todo terciário: <strong>sub-bosque, cogumelo seco, trufa discreta, terra molhada depois da chuva</strong> — os aromas do prato traduzidos para a taça. Espelho aromático absoluto: o cogumelo no garfo encontra o cogumelo evoluído no vinho. A cremosidade do risoto envelopa o Corton frágil e o sustenta; em contrapartida, o vinho traz frescor floral discreto — rosa murcha, pétala seca — que levanta o prato. <strong>Uma única ideia em registro outonal, prato e vinho se confundindo na mesma paleta de cogumelo e folha morta.</strong>',
+  },
+  pavillon: {
+    wine:'Pavillon Rouge 1982',
+    dish:'Tagliatelle com Ossobuco · primeiro no flight',
+    why:'O ossobuco cozido em fogo lento entrega <strong>carne desfiando, molho profundo de vinho tinto reduzido, tutano untuoso</strong>. O tagliatelle absorve o caldo e vira veículo do braseado. No vinho, 44 anos de evolução transformaram fruta e estrutura em <strong>tabaco curado, cedro úmido, charuto cubano, trufa madura, grafite, couro velho</strong>. O braseado longo no prato dialoga com a maturidade do vinho — ambos chegaram a essa elegância pelo tempo, não pela força. Os taninos do Pavillon, hoje aveludados e dissolvidos, deslizam entre cada garfada. <strong>Tempo na panela e tempo na taça.</strong> A safra do século encontrando um prato que pede longa paciência.',
+  },
+  tignanello: {
+    wine:'Tignanello 2015',
+    dish:'Tagliatelle com Ossobuco · segundo no flight',
+    why:'O mesmo prato, agora em uma energia completamente diferente. O Tignanello aos 11 anos chega com <strong>fruta opulenta — cereja preta, mirtilo, ameixa madura — tanino vigoroso, acidez tipicamente toscana</strong>. A gordura do tutano e o umami do braseado <strong>amaciam o tanino jovem</strong> na boca, e a acidez do Sangiovese refresca o paladar onde o Pavillon era todo evolução. Notas de tabaco doce, baunilha e alcaçuz dialogam com a redução escura do molho. O ossobuco ganha juventude e vibração — <strong>o mesmo prato, transformado pelo vinho</strong>.',
+  },
+  guado: {
+    wine:'Guado al Tasso 2015',
+    dish:'Tagliatelle com Ossobuco · terceiro no flight',
+    why:'O fechamento do trio. O Cabernet Sauvignon dominante (60% do blend) traz <strong>fruta preta densa — cassis, mirtilo, amora — eucalipto, baunilha de barrica nova, alcaçuz balsâmico, cacau</strong>. A barrica nova encontra o caramelo do braseado. <strong>Servido em paralelo ao Tignanello — mesma safra, mesma casa Antinori, perfis opostos</strong>: Sangiovese tenso e firme num lado, Cabernet redondo e mediterrâneo no outro. Toscana interior e costa do Tirreno na mesma mesa, em duas taças lado a lado. O ossobuco vira tela para esse contraste — o prato é o mesmo, mas cada vinho reescreve a garfada de um jeito.',
+  },
+  soldera: {
+    wine:'Soldera Case Basse Brunello Riserva 2005',
+    dish:'Seleção de Queijos Curados · pão de nozes · peras em lâminas',
+    why:'O ápice salgado. Os queijos curados longos trazem <strong>umami denso e cristalização salina</strong> que sustentam o Sangiovese tenso sem competir com seu perfume. O pão de nozes tostado adiciona amargor sutil que respeita a delicadeza floral do vinho — <strong>violeta, rosa, sândalo, alcaçuz floral, cereja vermelha em conserva</strong>. As peras em lâminas finas trazem o toque doce-mineral que dialoga com a fruta vermelha do Sangiovese. <strong>Pureza encontra pureza</strong>: o vinho mais etéreo da mesa, com 21 anos de envelhecimento em botte de Slavonia, ao lado de queijos que passaram anos na cave. O Soldera é perfume e tensão acima de qualquer potência — esse é o momento contemplativo da noite.',
+  },
+  suduiraut: {
+    wine:'Château Suduiraut 2018',
+    dish:'Peras Assadas · creme anglais · especiarias',
+    why:'A pera assada chega com a <strong>caramelização natural do açúcar da fruta, doçura amplificada pelo calor, textura amanteigada</strong>. O creme anglais sedoso traz baunilha de gema, e as especiarias dão calor aromático ao prato. No vinho, Sémillon botrytizado (90% do blend) entrega <strong>damasco, pêssego em calda, mel de acácia, casca de laranja, açafrão, baunilha de barrica nova</strong>. A pera espelha o pêssego e o damasco do Sauternes; a baunilha do creme encontra a baunilha do vinho; <strong>o caramelo da pera assada conversa com o mel cristalizado</strong>. As especiarias do prato dialogam com cardamomo e casca de laranja do Sauternes. Fechamento bordelês clássico — coerência com o Pavillon servido antes, agora em registro doce. <strong>Mesma região, mesma tradição, séculos de Bordeaux fechando a mesa.</strong>',
+  },
+};
+
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modalContent');
+const modalClose = document.getElementById('modalClose');
+
+function renderWine(key){
+  const w = wines[key];
+  const factsHTML = w.facts.map(([l,v])=>`
+    <div class="fact"><div class="fact-label">${l}</div><div class="fact-value">${v}</div></div>
+  `).join('');
+  const grapesHTML = w.grapes.map(([n,p])=>`
+    <div class="grape-row">
+      <div class="grape-name">${n}</div>
+      <div class="grape-bar"><div class="grape-fill" style="width:${p}%"></div></div>
+      <div class="grape-pct">${p}%</div>
+    </div>
+  `).join('');
+  const profileHTML = w.profile.map(p=>`
+    <div>
+      <div class="profile-label">${p.label}</div>
+      <div class="profile-row">
+        <div class="profile-l">${p.l}</div>
+        <div class="profile-bar"><div class="profile-dot" style="left:${p.pos}%"></div></div>
+        <div class="profile-r">${p.r}</div>
+      </div>
+    </div>
+  `).join('');
+  const aromasHTML = w.aromas.map(([cat,...items])=>`
+    <div class="aroma-cat">
+      <div class="aroma-cat-label">${cat}</div>
+      ${items.map(i=>`<span class="chip">${i}</span>`).join('')}
+    </div>
+  `).join('');
+
+  modalContent.innerHTML = `
+    <div class="wine-band" style="background:${w.bandColor}">
+      <div class="band-type">${w.type}</div>
+    </div>
+    <div class="wine-head">
+      <h2 class="wine-title">${w.title}</h2>
+      <div class="wine-vintage-big">${w.vintage}</div>
+      <div class="wine-sub">${w.sub}</div>
+    </div>
+    <div class="facts">${factsHTML}</div>
+    <div class="section">
+      <div class="section-title">Castas</div>
+      <div class="grapes">${grapesHTML}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Perfil organoléptico</div>
+      <div class="profile">${profileHTML}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Aromas</div>
+      <div class="aromas">${aromasHTML}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Vinificação & envelhecimento</div>
+      <p class="text-block">${w.making}</p>
+    </div>
+    <div class="section">
+      <div class="section-title">A casa</div>
+      <p class="text-block">${w.house}</p>
+    </div>
+    <div class="section">
+      <div class="section-title">A safra · estado atual</div>
+      <p class="text-block">${w.vintage_note}</p>
+    </div>
+  `;
+  openModal();
+}
+
+function renderPairing(key){
+  const p = pairings[key];
+  modalContent.innerHTML = `
+    <div class="pairing-header">
+      <div class="pairing-tag">Harmonização</div>
+      <h2 class="pairing-title">${p.wine}</h2>
+      <div class="pairing-dish"><em>com</em> ${p.dish}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">O encontro na mesa</div>
+      <p class="text-block">${p.why}</p>
+    </div>
+  `;
+  openModal();
+}
+
+function openModal(){
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  modal.querySelector('.modal').scrollTop=0;
+}
+function closeModal(){
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+document.querySelectorAll('[data-wine]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();renderWine(b.dataset.wine);});
+});
+document.querySelectorAll('[data-pairing]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();renderPairing(b.dataset.pairing);});
+});
+document.querySelectorAll('.wine-card').forEach(c=>{
+  c.addEventListener('click',e=>{
+    if(e.target.classList.contains('btn'))return;
+    const wb = c.querySelector('[data-wine]');
+    if(wb) renderWine(wb.dataset.wine);
+  });
+});
+modalClose.addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('active'))closeModal();});
+</script>
+</body>
+</html>
